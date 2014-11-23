@@ -1,6 +1,6 @@
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
-var to5 = require('gulp-6to5');
+var to5Browserify = require("6to5-browserify");
 
 // Basic usage
 gulp.task('6to5ify', function() {
