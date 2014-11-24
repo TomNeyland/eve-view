@@ -1,16 +1,46 @@
 var gulp = require('gulp');
-var browserify = require('gulp-browserify');
-var to5Browserify = require("6to5-browserify");
+var source = require('vinyl-source-stream');
+var browserify = require('browserify');
+var watchify = require('watchify');
+var to5 = require('gulp-6to5');
+var watch = require('gulp-watch');
 
-// Basic usage
-gulp.task('6to5ify', function() {
-    // Single entry point to browserify
-    gulp.src('src/eve-view/index.es6')
-        .pipe(browserify({
-          debug : !gulp.env.development,
-          transform: [to5Browserify],
-          extensions: ['es6']
-        }))
+// TODO split up tasks better
 
-        .pipe(gulp.dest('./build/eve-view/'));
+gulp.task('6to5', function() {
+    return gulp.src('src/**/*.js')
+        .pipe(to5())
+        .pipe(gulp.dest('.es5/'));
 });
+
+gulp.task('watch:6to5', ['6to5'], function() {
+    return watch('src/**/*.js', function(files) {
+        return files.pipe(to5())
+            .pipe(gulp.dest('.es5/'));
+    });
+
+});
+
+gulp.task('watch:build', ['6to5'], function() {
+
+    var bundler = watchify(browserify({
+        basedir: '.es5/',
+        debug: true,
+        standalone: 'eveview',
+        entries: './eve-view/index.js'
+    }));
+
+    bundler.on('update', rebundle);
+    // bundler.transform('brfs');
+
+    function rebundle() {
+        return bundler
+            .bundle()
+            .pipe(source('index.js'))
+            .pipe(gulp.dest('./build/eve-view/'));
+    }
+
+    return rebundle();
+});
+
+gulp.task('watch:all', ['watch:6to5', 'build']);
