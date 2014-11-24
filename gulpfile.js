@@ -26,12 +26,11 @@ gulp.task('watch:build', ['6to5'], function() {
     var bundler = watchify(browserify({
         basedir: '.es5/',
         debug: true,
-        standalone: 'eveview',
+        standalone: 'eve-view',
         entries: './eve-view/index.js'
     }));
 
     bundler.on('update', rebundle);
-    // bundler.transform('brfs');
 
     function rebundle() {
         return bundler
@@ -43,4 +42,4 @@ gulp.task('watch:build', ['6to5'], function() {
     return rebundle();
 });
 
-gulp.task('watch:all', ['watch:6to5', 'build']);
+gulp.task('watch:all', ['watch:6to5', 'watch:build']);
