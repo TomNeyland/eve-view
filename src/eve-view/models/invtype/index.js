@@ -1,6 +1,6 @@
-import Type from "./";
+import Type from "./type";
 import Character from "./character";
 
-export default { Character, Type };
+export { Character, Type };
 
 
