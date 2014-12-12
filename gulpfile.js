@@ -26,7 +26,7 @@ gulp.task('watch:build', ['6to5'], function() {
     var bundler = watchify(browserify({
         basedir: '.es5/',
         debug: true,
-        standalone: 'eve-view',
+        // standalone: 'eve-view',
         entries: './eve-view/index.js'
     }));
 

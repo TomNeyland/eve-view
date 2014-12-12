@@ -1,6 +1,6 @@
 import {Type} from "./";
 
-class Character {
+class Character extends Type {
 
 }
 
